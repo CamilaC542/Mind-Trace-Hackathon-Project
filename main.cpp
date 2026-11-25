@@ -51,12 +51,12 @@ int main() {
 
     mkultra.id = "FILE 001";
     mkultra.title = "PROJECT MKULTRA";
-    mkultra.date = "";
-    mkultra.category = "";
-    mkultra.summary = "";
-    mkultra.evidence = "";
-    mkultra.question = "";
-    mkultra.source = "";
+    mkultra.date = "1953 - 1973";
+    mkultra.category = "BEHAVIORAL RESEARCH";
+    mkultra.summary = "A secret CIA program investigating drugs, interrogation, and methods of influencing human behavior.";
+    mkultra.evidence = "Declassified CIA documents revealed experiments involving LSD and other substances, sometimes conducted without participants' informed consent.";
+    mkultra.question = "Can national security justify experimenting on people without their knowledge or consent? MKULTRA raises serious questions about human rights, scientific ethics, and government accountability.";
+    mkultra.source = "https://www.cia.gov/library/abbottabad-compound/9D/9D9A27BD7241E2074EAF81C7FC2C86CF_MK.Ultra_Senate.Hearings.pdf";
 
     Filess.push_back(mkultra);
 
@@ -64,25 +64,24 @@ int main() {
 
     stargate.id = "FILE 002";
     stargate.title = "PROJECT STARGATE";
-    stargate.date = "";
-    stargate.category = "";
-    stargate.summary = "";
-    stargate.evidence = "";
-    stargate.question = "";
-    stargate.source = "";
-
+    stargate.date = "1970s - 1995";
+    stargate.category = "PSYCHIC INTELLIGENCE RESEARCH";
+    stargate.summary = "A U.S. intelligence research program investigating whether remote viewing could be used to gather information about distant locations and targets.";
+    stargate.evidence = "Declassified records document remote viewing experiments. A 1995 evaluation questioned whether the results provided reliable and useful intelligence.";
+    stargate.question = "Should intelligence agencies invest in research when its scientific reliability remains uncertain?";
+    stargate.source = "American Institutes for Research - 1995 Evaluation of the Stargate Program";
     Filess.push_back(stargate);
 
     Files ai;
 
     ai.id = "FILE 003";
     ai.title = "AI PSYOPS";
-    ai.date = "";
-    ai.category = "";
-    ai.summary = "";
-    ai.evidence = "";
-    ai.question = "";
-    ai.source = "";
+    ai.date = "2020s - PRESENT";
+    ai.category = "DIGITAL INFORMATION MANIPULATION";
+    ai.summary = "The use of artificial intelligence in influence operations, including synthetic media, automated messaging, and the spread of misleading information.";
+    ai.evidence = "AI-generated images, videos, and text can make deceptive narratives easier to produce and distribute at scale.";
+    ai.question = "How can individuals distinguish authentic information from AI-generated manipulation?";
+    ai.source = "CISA - Foreign Influence Operations and Disinformation Resources";
 
     Filess.push_back(ai);
 
