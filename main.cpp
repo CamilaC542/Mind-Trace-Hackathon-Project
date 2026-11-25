@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "Files.h"
 #include "Terminal.h"
+#include "Questions.h"
 
 #include <iostream>
 #include <vector>
@@ -9,13 +10,11 @@
 #include <algorithm>
 #include <cctype>
 
+using namespace std;
+
 string Uppercase(string text) {
 
-    transform(
-        text.begin(),
-        text.end(),
-        text.begin(),
-        [](unsigned char c) {
+    transform(text.begin(), text.end(), text.begin(), [](unsigned char c) {
             return toupper(c);
         }
     );
@@ -37,23 +36,12 @@ int FindFiles(const vector<Files>& Filess, const string& search) {
     return -1;
 }
 
-using namespace std;
 int main() {
 
-    /***
-
-     your project code here!
-     
-     ***/
-
-     const int screenWidth = 1100;
+    const int screenWidth = 1100;
     const int screenHeight = 760;
 
-    InitWindow(
-        screenWidth,
-        screenHeight,
-        "MINDTRACE - Intelligence Archive"
-    );
+    InitWindow(screenWidth, screenHeight, "MINDTRACE - Intelligence Archive");
 
     SetTargetFPS(60);
 
@@ -65,35 +53,25 @@ int main() {
     mkultra.title = "PROJECT MKULTRA";
     mkultra.date = "";
     mkultra.category = "";
-
     mkultra.summary = "";
-
     mkultra.evidence = "";
-
     mkultra.question = "";
-
     mkultra.source = "";
 
     Filess.push_back(mkultra);
 
+    Files stargate;
 
-    Files cointelpro;
+    stargate.id = "FILE 002";
+    stargate.title = "PROJECT STARGATE";
+    stargate.date = "";
+    stargate.category = "";
+    stargate.summary = "";
+    stargate.evidence = "";
+    stargate.question = "";
+    stargate.source = "";
 
-    cointelpro.id = "FILE 002";
-    cointelpro.title = "COINTELPRO";
-    cointelpro.date = "";
-    cointelpro.category = "";
-
-    cointelpro.summary = "";
-
-    cointelpro.evidence = "";
-
-    cointelpro.question = "";
-
-    cointelpro.source = "";
-
-    Filess.push_back(cointelpro);
-
+    Filess.push_back(stargate);
 
     Files ai;
 
@@ -101,30 +79,24 @@ int main() {
     ai.title = "AI PSYOPS";
     ai.date = "";
     ai.category = "";
-
     ai.summary = "";
-
     ai.evidence = "";
-
     ai.question = "";
-
     ai.source = "";
 
     Filess.push_back(ai);
 
-
     Terminal terminal;
+    Questions questionnaire;
 
     int selectedFiles = 0;
+    int selectedTab = 0;
 
+    bool questionnaireStarted = false;
     bool running = true;
 
     cout << "MINDTRACE STARTED" << endl;
-    cout << "Archive contains "
-         << Filess.size()
-         << " files."
-         << endl;
-
+    cout << "Archive contains " << Filess.size() << " files." << endl;
 
     while (!WindowShouldClose() && running) {
 
@@ -134,194 +106,153 @@ int main() {
 
             for (int i = 0; i < Filess.size(); i++) {
 
-                Rectangle fileArea = {
-                    25,
-                    120.0f + i * 95,
-                    285,
-                    80
-                };
+                Rectangle fileArea = {25, 120.0f + i * 95, 285, 80 };
 
                 if (CheckCollisionPointRec(mouse, fileArea)) {
-
                     selectedFiles = i;
+                    selectedTab = i;
 
-                    terminal.AddLine(
-                        "OPENED " + Filess[i].id
-                    );
+                    terminal.AddLine("OPENED " + Filess[i].id);
 
-                    cout << "Opened: "
-                         << Filess[i].title
-                         << endl;
+                    cout << "Opened: " << Filess[i].title << endl;
                 }
+            }
+
+            Rectangle assessmentArea = {25, 405, 285, 80};
+
+            if (CheckCollisionPointRec(mouse, assessmentArea)) {
+
+                selectedTab = 3;
+
+                if (!questionnaireStarted) {
+                    questionnaire.Start();
+                    questionnaireStarted = true;
+                }
+
+                terminal.AddLine("OPENED SUBJECT ASSESSMENT");
+
+                cout << "Opened: SUBJECT ASSESSMENT" << endl;
             }
         }
 
+        if (selectedTab == 3) {
 
-        string command;
+            questionnaire.Update();
 
-        if (terminal.UpdateInput(command)) {
+        } else {
 
-            command = Uppercase(command);
+            string command;
 
-            terminal.AddLine("> " + command);
+            if (terminal.UpdateInput(command)) {
 
-            cout << "COMMAND: "
-                 << command
-                 << endl;
+                command = Uppercase(command);
 
+                terminal.AddLine("> " + command);
 
-            if (command == "HELP") {
+                cout << "COMMAND: " << command << endl;
 
-                terminal.AddLine(
-                    "HELP | FILES | OPEN [ID] | CONNECTIONS | EXIT"
-                );
+                if (command == "HELP") {
 
-            }
+                    terminal.AddLine("HELP | FILES | OPEN [ID] | ASSESSMENT | CONNECTIONS | EXIT");
 
-            else if (command == "FILES") {
+                } else if (command == "FILES") {
 
-                for (const Files& d : Filess) {
+                    for (const Files& d : Filess) {
+                        terminal.AddLine(d.id + " - " + d.title);
+                    }
 
-                    terminal.AddLine(
-                        d.id + " - " + d.title
-                    );
-                }
+                } else if (command == "CONNECTIONS") {
 
-            }
+                    terminal.AddLine("FILE 001 <-> FILE 002");
+                    terminal.AddLine("FILE 002 <-> FILE 003");
+                    terminal.AddLine("ALL FILES <-> POWER AND CONTROL");
 
-            else if (command == "CONNECTIONS") {
+                } else if (command == "ASSESSMENT") {
 
-                terminal.AddLine(
-                    "FILE 001 <-> FILE 002"
-                );
+                    selectedTab = 3;
 
-                terminal.AddLine(
-                    "FILE 002 <-> FILE 003"
-                );
+                    if (!questionnaireStarted) {
+                        questionnaire.Start();
+                        questionnaireStarted = true;
+                    }
 
-                terminal.AddLine(
-                    "ALL FILES <-> POWER AND CONTROL"
-                );
+                } else if (command.rfind("OPEN ", 0) == 0) {
 
-            }
+                    string search = command.substr(5);
 
-            else if (command.rfind("OPEN ", 0) == 0) {
+                    int result = FindFiles(Filess, search);
 
-                string search = command.substr(5);
+                    if (result != -1) {
 
-                int result = FindFiles(
-                    Filess,
-                    search
-                );
+                        selectedFiles = result;
+                        selectedTab = result;
 
-                if (result != -1) {
+                        terminal.AddLine("FILE OPENED SUCCESSFULLY.");
 
-                    selectedFiles = result;
+                    } else {
 
-                    terminal.AddLine(
-                        "FILE OPENED SUCCESSFULLY."
-                    );
+                        terminal.AddLine("ERROR: FILE NOT FOUND.");
+                    }
+
+                } else if (command == "EXIT") {
+
+                    running = false;
 
                 } else {
 
-                    terminal.AddLine(
-                        "ERROR: FILE NOT FOUND."
-                    );
+                    terminal.AddLine("UNKNOWN COMMAND. TYPE HELP.");
                 }
-
-            }
-
-            else if (command == "EXIT") {
-
-                running = false;
-
-            }
-
-            else {
-
-                terminal.AddLine(
-                    "UNKNOWN COMMAND. TYPE HELP."
-                );
             }
         }
-
 
         BeginDrawing();
 
-        ClearBackground(
-            Color{12, 15, 15, 255}
-        );
+        ClearBackground(Color{12, 15, 15, 255});
 
+        DrawRectangle(0, 0, screenWidth, 70, Color{20, 35, 30, 255});
 
-        DrawRectangle(
-            0, 0,
-            screenWidth, 70,
-            Color{20, 35, 30, 255}
-        );
+        DrawText("MINDTRACE", 25, 15, 30, GREEN);
 
-        DrawText(
-            "MINDTRACE",
-            25, 15,
-            30,
-            GREEN
-        );
+        DrawText("INTELLIGENCE ARCHIVE // ACCESS GRANTED", 280, 28, 15, LIGHTGRAY);
 
-        DrawText(
-            "INTELLIGENCE ARCHIVE // ACCESS GRANTED",
-            280, 28,
-            15,
-            LIGHTGRAY
-        );
-
-
-        DrawText(
-            "ARCHIVE FILES",
-            25, 85,
-            18,
-            GREEN
-        );
-
+        DrawText("ARCHIVE FILES", 25, 85, 18, GREEN);
 
         for (int i = 0; i < Filess.size(); i++) {
 
-            Rectangle fileArea = {
-                25,
-                120.0f + i * 95,
-                285,
-                80
-            };
+            Rectangle fileArea = {25, 120.0f + i * 95, 285, 80};
 
-            Filess[i].DrawCard(
-                fileArea,
-                i == selectedFiles
-            );
+            Filess[i].DrawCard(fileArea, selectedTab == i);
         }
 
+        Rectangle assessmentArea = {25, 405, 285, 80};
 
-        Rectangle detailsArea = {
-            335, 85,
-            740, 455
-        };
+        DrawRectangleRec(assessmentArea, selectedTab == 3 ? Color{35, 75, 55, 255} : Color{25, 35, 32, 255});
 
-        Filess[selectedFiles].DrawDetails(
-            detailsArea
-        );
+        DrawRectangleLinesEx(assessmentArea, 2, selectedTab == 3 ? GREEN : DARKGREEN);
 
+        DrawText("FILE 004", 40, 420, 15, GREEN);
 
-        Rectangle terminalArea = {
-            25, 560,
-            1050, 175
-        };
+        DrawText("SUBJECT ASSESSMENT", 40, 445, 17, LIGHTGRAY);
+
+        if (selectedTab == 3) {
+
+            questionnaire.Draw({335, 85, 740, 455});
+
+        } else {
+
+            Rectangle detailsArea = {335, 85, 740, 455};
+            Filess[selectedFiles].DrawDetails(detailsArea);
+        }
+
+        Rectangle terminalArea = {25, 560, 1050, 175};
 
         terminal.Draw(terminalArea);
 
-
         EndDrawing();
-
     }
 
-
     CloseWindow();
+
     cout << "MINDTRACE CLOSED." << endl;
 
     return 0;
