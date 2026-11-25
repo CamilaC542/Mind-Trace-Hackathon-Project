@@ -322,7 +322,6 @@ int main() {
 
 
     CloseWindow();
-
     cout << "MINDTRACE CLOSED." << endl;
 
     return 0;
